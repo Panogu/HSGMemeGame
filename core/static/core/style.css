@@ -1,0 +1,17 @@
+body{
+    height: 100%;
+}
+
+.fullpage{
+    height: 100%;
+    background-color: lightgrey;
+}
+
+.inner{
+}
+
+.image-container{
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}

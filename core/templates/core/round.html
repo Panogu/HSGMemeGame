@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <title>HSG Memegame</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'core/static/core/style.css' %}">
+</head>
+
+<body>
+    <div class="fullpage">
+        {% block content %}
+        <div class="inner h-100 w-100 row m-0">
+            <h2 class="col-12 text-center mt-5">Round n</h2>
+
+            <!-- <div class="col-12 justify-content-center d-flex align-items-center">
+                <button class="btn btn-danger rounded-pill shadow w-50">Done</button>
+            </div> -->
+
+            <div class="image d-flex col-12 justify-content-center">
+                <div style="background: url('{% static 'core/static/core/example.jpg' %}');" class="image-container w-50 h-100 col-6"></div>
+            </div>
+
+            <!-- {% block gameinput %}
+            <div class="d-flex flex-column justify-content-center align-items-center col-12">
+                
+                <div class="mt-5 d-flex flex-column justify-content-center align-items-center">
+                    <a class="material-icons" href="#">refresh</a>
+
+                    <p>
+                        Player n it's your turn!
+                    </p>
+                </div>
+
+                <button class="btn btn-danger rounded-pill shadow w-50">Ok, I'm ready!</button>
+            </div>
+            {% endblock %} -->
+
+            <div class="row col-12 m-0 mt-auto">
+                {% for i in '012345'|make_list %}
+                <div class="col-2 px-2">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Lorem ipsum dolor sit amet...</h5> 
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+        {% endblock %}
+    </div>
+</body>
+
+
+</html>
