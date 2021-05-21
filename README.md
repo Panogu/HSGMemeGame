@@ -4,7 +4,7 @@
 Course: 7,789 | 8,789: Skills: Programming with Advanced Computer Languages  
 Professor: Mario Silic  
 University: University of St.Gallen (HSG)  
-Authors: Wanja Butz, Jan Ewenz, Adrian Pandjaitan  
+Authors: Wanja Butz, Jan Ewenz Rocher, Adrian Pandjaitan  
 Date: 20.05.2021  
 ## **Background**
 The following project is a submission of a student team (see authors) as part of the decentral examination of the course (see Course). For this, the team sought to take on a project which meets the requirements of the course and which is interesting enough to be pursued beyond the end of the course.  
