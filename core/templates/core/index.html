@@ -7,7 +7,7 @@
 
 
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'core/static/core/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
 </head>
 
 <body>
@@ -39,10 +39,18 @@
                 <div class="card shadow h-100 col-3 mx-4">
                     <div class="card-body">
                         <h5 class="card-title text-center">Players</h5>
-                        <div class="d-flex flex-column align-items-center justify-content-center">
-                            <input type="text" class="form-control" id="#player-n" placeholder="Type your name...">
-                            <button class="btn material-icons mt-3">add_circle_outline</button>
-                        </div>  
+
+                        {% for player in current_game.players.all %}{{ player.username }}<br/>{% endfor %}
+                        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+                        <form action="{% url 'core:add_user' %}" method="post" class="d-flex flex-column align-items-center">
+                        {% csrf_token %}
+                            <div class="d-flex flex-column align-items-center justify-content-center">
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Type your name...">
+                            </div>  
+                            <button type="submit" class="btn material-icons mt-3">add_circle_outline</button>
+                        </form>
+                    
                     </div>
                 </div>
 
@@ -57,7 +65,7 @@
             </div>
 
             <div class="bottom-container d-flex flex-column justify-content-center align-items-center w-100 mt-5">
-                <button class="btn btn-success rounded-pill shadow col-3">Start</button>
+                <a class="btn btn-success rounded-pill shadow col-3" href="{% url 'core:start' %}">Start</a>
                 <a class="btn btn-link mt-3" href="#">How to play</a>
             </div>
 

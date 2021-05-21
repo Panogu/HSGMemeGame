@@ -1,0 +1,13 @@
+{% extends "core/round_main.html" %}
+
+{% block gameinput %}
+    {% for i in '012345'|make_list %}
+        <div class="col-2 px-2">
+            <a class="card shadow" href="#">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Meme Line Dummy {{i}}</h5> 
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+{% endblock %}
