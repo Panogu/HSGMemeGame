@@ -12,6 +12,14 @@ For this, we chose the HSG Meme Game, which is a game for students of the Univer
 ## **Game rules**
 Every player has 7 text cards on their hand. Each round one of the players is a judge and the others are players. For each round one meme is shown on the screen and each one of the players is putting a text card which they believe is funniest to that particular meme. Then the judge sees all the text cards and picks the funniest one which is also the winner card. The player to first win 7 rounds has won the game.  
 The detailed game rules can be viewed in the seperate Game rules file.
+## **Installation & running**
+In order to execute the program, please follow these steps:
+1) Download the git repository as a .zip file
+2) Unzip it to your desired location
+3) Access your computer's terminal 
+4) Install django (in case you haven't installed it already, please follow this documentation: https://docs.djangoproject.com/en/1.8/howto/windows/#:~:text=Django%20can%20be%20installed%20easily,version%20in%20the%20command%20prompt.)
+5) Paste the path to the hsgmemegame folder into your terminal
+6) Copy the generated link, add "/game" to the end of the link, and put it in your browser
 ## **Technical implementation - Overview**
 The project consists of three main elements: the backend, the django framework in between and the frontend.
 ### **1) The backend**
