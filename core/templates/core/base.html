@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <title>HSG Memegame</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
+</head>
+
+<body>
+    <div class="fullpage">
+        {% block fullpage %}
+        <div class="top">
+            {% block top %}
+            {% endblock %}
+        </div>
+        <div class="main">
+            {% block main %}
+            {% endblock %}
+        </div>
+        <div class="bottom">
+            {% block bottom %}
+            {% endblock %}
+        </div>
+        {% endblock %}
+    </div>
+</body>

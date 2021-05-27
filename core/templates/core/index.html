@@ -1,78 +1,60 @@
-<html>
+{% extends "core/base.html" %}
 
-<head>
-    <title>HSG Memegame</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% block top %}
+<div class="container h-100 w-100">
+    <h1 class="h-100 w-100 d-flex align-items-center justify-content-center">
+        HSG Meme Game
+    </h1>
+</div>
+{% endblock %}
 
-
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
-</head>
-
-<body>
-    <div class="fullpage">
-        {% block content %}
-        <div class="inner h-100 w-100 d-flex align-items-center justify-content-center flex-column">
-
-            <div class="card-container h-25 w-100 d-flex align-items-center justify-content-center">
-                <div class="card shadow h-100 col-3">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Meme Packs</h5>
-                        <div class="d-flex flex-column align-items-center justify-content-center">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="classic-pack">
-                                <label class="custom-control-label" for="classic-pack">Classic</label>
-                            </div>
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="hsgmemes-pack">
-                                <label class="custom-control-label" for="hsgmemes-pack">HSG Memes</label>
-                            </div>
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="extension-pack">
-                                <label class="custom-control-label" for="extension-pack">Extension Pack</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card shadow h-100 col-3 mx-4">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Players</h5>
-
-                        {% for player in current_game.players.all %}{{ player.username }}<br/>{% endfor %}
-                        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-                        <form action="{% url 'core:add_user' %}" method="post" class="d-flex flex-column align-items-center">
-                        {% csrf_token %}
-                            <div class="d-flex flex-column align-items-center justify-content-center">
-                                <input type="text" class="form-control" name="username" id="username" placeholder="Type your name...">
-                            </div>  
-                            <button type="submit" class="btn material-icons mt-3">add_circle_outline</button>
-                        </form>
-                    
-                    </div>
-                </div>
-
-                <div class="card shadow h-100 col-3">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Points to win</h5>
-                        <div class="d-flex flex-column align-items-center justify-content-center">
-                            <input type="number" class="form-control" id="points-to-win" name="points-to-win" min="1" max="10">
-                        </div>
-                    </div>
+{% block main %}
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="d-flex w-100 h-100 row">
+        <div class="col-12 col-md-4 h-100">
+            <div class="card h-100 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Meme Packs</h2>
                 </div>
             </div>
-
-            <div class="bottom-container d-flex flex-column justify-content-center align-items-center w-100 mt-5">
-                <a class="btn btn-success rounded-pill shadow col-3" href="{% url 'core:start' %}">Start</a>
-                <a class="btn btn-link mt-3" href="#">How to play</a>
-            </div>
-
         </div>
-        {% endblock %}
+        <div class="col-12 col-md-4 py-3 py-md-0 px-md-3 h-100">
+           <div class="card h-100 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Players</h2>
+                    <form action="{% url 'core:add_user' %}" method="POST">
+                        {% csrf_token %}
+                        {% for player in current_game.players.all %}
+                        <p class="d-flex w-100 my-2 p-3 rounded bg-light border">
+                            <span class="username">{{player.username}}</span>
+                            <a class="material-icons icon-link white rounded-pill bg-danger ml-auto" href="{% url 'core:remove_user' player.id %}">
+                                remove
+                            </a>
+                        </p> 
+                        {% endfor %}
+                        <input id="username" name="username" type="text" class="d-flex w-100 my-2 p-3 rounded bg-light border" placeholder="Type your name here...">
+                        <div class="d-flex align-items-center justify-content-center w-100 mt-3">
+                            <button type="submit" class="btn material-icons icon-link white rounded-pill bg-success">
+                                add
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div> 
+        </div>
+        <div class="col-12 col-md-4 h-100">
+            <div class="card h-100 shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Points to win</h2>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
+</div>
+{% endblock %}
 
-
-</html>
+{% block bottom %}
+<div class="container d-flex w-100 h-100 align-items-center justify-content-center">
+    <a class="btn btn-danger rounded-pill shadow w-75" href="{% url 'core:round' %}">Start</a>
+</div>
+{% endblock %}

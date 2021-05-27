@@ -1,0 +1,33 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block top %}
+<div class="px-4 d-flex h-100 w-100">
+    <h1 class="col-12 text-center">
+        {{ current_game.last_winner }} won round {{ current_game.current_round|add:"-1" }}!
+    </h1>
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="row h-100 w-100">
+    <div class="image d-flex col-6 px-4 justify-content-center h-100">
+        <div style="background: url('{% static 'core/example.jpg' %}');" class="image-container w-100 h-100"></div>
+    </div>
+    <div class="card col-6 p-4 round">
+        <h2>Scoreboard</h2>
+        {% for player in current_game.players.all %}
+        <p class="d-flex w-100 my-2 p-3 rounded bg-light border">
+            {{ player.username }}
+            <span class="ml-auto">{{ player.points }}/{{current_game.points_to_win}}</span>
+        </p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block bottom %}
+<div class="d-flex flex-column justify-content-center align-items-center col-12 h-100">
+    <a class="btn btn-danger rounded-pill shadow w-50" href="{% url 'core:round' %}">Continue</a>
+</div>
+{% endblock %}

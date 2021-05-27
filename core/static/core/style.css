@@ -3,15 +3,87 @@ body{
 }
 
 .fullpage{
+    position: relative;
     height: 100%;
+    width: 100%;
     background-color: lightgrey;
 }
 
-.inner{
+.top{
+    position: absolute;
+    top: 5vh;
+    height: 10vh;
+    width: 100%;
+}
+
+.main{
+    position: absolute;
+    top: 20vh;
+    height: 50vh;
+    width: 100%;
+}
+
+.bottom{
+    position: relative;
+    top: 75vh;
+    height: 25vh;
+    width: 100%;
+}
+
+.username{
+    font-size: 115%;
+}
+
+.icon-link{
+    display: flex;
+    text-decoration: none;
+    height: 36px;
+    width: 36px;
+    color: black;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-link:hover{
+    text-decoration: none;
+}
+
+.white{
+    color: white;
+}
+
+.white:hover{
+    color: white;
+}
+
+.black{
+    color: black;
+}
+
+.black:hover{
+    color: black;
 }
 
 .image-container{
     background-size: contain !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
+}
+
+.line-card{
+    border-radius: 1.5rem 1.5rem 0rem 0rem;
+    color: black;
+    text-decoration: none;
+}
+
+.line-card:hover{
+    color: black;
+    text-decoration: none;
+}
+
+.big-button{
+    height: 7rem;
+    width: 7rem;
+    font-size: 300%;
+    font-weight: 600;
 }

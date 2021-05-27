@@ -1,18 +1,24 @@
 {% extends "core/round_main.html" %}
 
-{% block donebutton %}{% endblock %}
+{% block top %}
+<div class="px-4 d-flex h-100 w-100">
+    <h1 class="col-3">
+        Round {{ current_game.current_round }}
+    </h1>
+    <h1 class="col-6 text-center">
+        {{ current_game.get_current_player.username }} it's your turn!
+    </h1>
+</div>
+{% endblock %}
 
-{% block gameinput %}
-    <div class="d-flex flex-column justify-content-center align-items-center col-12">
-        
-        <div class="mt-5 d-flex flex-column justify-content-center align-items-center">
-            <a class="material-icons" href="#">refresh</a>
+{% block actionbutton %}
+<a class="rounded-pill bg-warning shadow material-icons icon-link black big-button" href="#">
+    refresh
+</a>
+{% endblock %}
 
-            <p>
-                {{ current_player.username }}, it's your turn!
-            </p>
-        </div>
-
+{% block bottom %}
+    <div class="d-flex flex-column justify-content-center align-items-center col-12 h-100">
         <a class="btn btn-danger rounded-pill shadow w-50" href="{% url 'core:round' %}">Ok, I'm ready!</a>
     </div>
 {% endblock %}

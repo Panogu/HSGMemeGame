@@ -1,13 +1,17 @@
 {% extends "core/round_main.html" %}
 
+{% block message %}Please select the funniest line!{% endblock %}
+
 {% block gameinput %}
-    {% for i in '012345'|make_list %}
-        <div class="col-2 px-2">
-            <a class="card shadow" href="#">
-                <div class="card-body">
-                    <h5 class="card-title text-center">Meme Line Dummy {{i}}</h5> 
-                </div>
-            </a>
-        </div>
+    {% for card in current_cards %}
+    <div class="col-2 px-2">
+        <a class="card shadow"
+            {% if current_card == forloop.counter0 %}style="background-color: yellow !important;"{% endif %}
+            href="{% url 'core:select_card' forloop.counter0 %}">
+            <div class="card-body">
+                <h5 class="card-title text-center">{{card.line}}</h5> 
+            </div>
+        </a>
+    </div>
     {% endfor %}
 {% endblock %}

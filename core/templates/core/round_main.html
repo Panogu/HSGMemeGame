@@ -1,49 +1,43 @@
-<html>
+{% extends "core/base.html" %}
+{% load static %}
 
-<head>
-    <title>HSG Memegame</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% block top %}
+<div class="px-4 d-flex h-100 w-100">
+    <h1 class="">
+        Round {{ current_game.current_round }}
+    </h1>
+    <h1 class="ml-auto">
+        Player: {{ current_game.get_current_player.username }}
+    </h1>
+</div>
+{% endblock %}
 
-
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'core/style.css' %}">
-</head>
-
-<body>
-    <div class="fullpage">
-        {% block content %}
-        <div class="inner h-100 w-100 row m-0">
-            <h2 class="col-12 text-center mt-5">Round {{ current_game.current_round }}</h2>
-            
-            {% block donebutton %}
-            <div class="col-12 justify-content-center d-flex align-items-center">
-                <a class="btn btn-danger rounded-pill shadow w-50" href="{% url 'core:next' %}">Done</a>
-            </div>
-            {% endblock %}
-
-            <div class="image d-flex col-12 justify-content-center">
-                <div style="background: url('{% static 'core/example.jpg' %}');" class="image-container w-50 h-100 col-6"></div>
-            </div>
-
-            {% block gameinput %}
-                {% for card in current_game.current_cards.all %}
-                    <div class="col-2 px-2">
-                        <a class="card shadow"
-                            {% if current_card == forloop.counter0 %}style="background-color: yellow !important;"{% endif %}
-                            href="{% url 'core:select_card' forloop.counter0 %}">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">{{card.line}}</h5> 
-                            </div>
-                        </a>
-                    </div>
-                {% endfor %}
-            {% endblock %}
-
-        </div>
+{% block main %}
+<div class="row h-100 w-100">
+    <div class="image d-flex col-8 px-4 justify-content-center h-100">
+        <div style="background: url('{% static 'core/example.jpg' %}');" class="image-container w-100 h-100"></div>
+    </div>
+    <div class="col-4 h-100 d-flex justify-content-center align-items-center">
+        {% block actionbutton %}
+        <a class="rounded-pill bg-success shadow material-icons icon-link white big-button" href="{% url 'core:submit_card' %}">
+            done
+        </a>
         {% endblock %}
     </div>
-</body>
+</div>
+{% endblock %}
 
-
-</html>
+{% block bottom %}
+{# FIXME Testen, was passiert, wenn man zu oft auf eine Karte drückt #}
+<div class="d-flex flex-row justify-content-center h-100">
+    {% for card in current_cards %}
+        <div class="col-2 px-2 h-100">
+            <a class="d-flex line-card bg-light shadow h-100 px-2 pt-4 justify-content-center"
+                {% if current_card == forloop.counter0 %}style="background-color: yellow !important;"{% endif %}
+                href="{% url 'core:select_card' forloop.counter0 %}">
+                {{card.line}}
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
