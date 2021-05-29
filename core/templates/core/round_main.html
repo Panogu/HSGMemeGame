@@ -31,13 +31,13 @@
 {# FIXME Testen, was passiert, wenn man zu oft auf eine Karte drückt #}
 <div class="d-flex flex-row justify-content-center h-100">
     {% for card in current_cards %}
-        <div class="col-2 px-2 h-100">
-            <a class="d-flex line-card bg-light shadow h-100 px-2 pt-4 justify-content-center"
-                {% if current_card == forloop.counter0 %}style="background-color: yellow !important;"{% endif %}
-                href="{% url 'core:select_card' forloop.counter0 %}">
-                {{card.line}}
-            </a>
-        </div>
+    <div class="col-2 px-2 h-100">
+        <a class="d-flex line-card bg-light shadow h-100 px-2 pt-4 justify-content-center"
+            {% if current_card == forloop.counter0 %}style="background-color: yellow !important;"{% endif %}
+            href="{% url 'core:select_card' forloop.counter0 %}">
+            {{card.line}}
+        </a>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

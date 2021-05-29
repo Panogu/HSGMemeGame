@@ -4,7 +4,7 @@
 {% block top %}
 <div class="px-4 d-flex h-100 w-100">
     <h1 class="col-12 text-center">
-        {{ current_game.last_winner }} won round {{ current_game.current_round|add:"-1" }}!
+        {{ current_game.get_last_winner.username }} won round {{ current_game.current_round }}!
     </h1>
 </div>
 {% endblock %}
@@ -28,6 +28,6 @@
 
 {% block bottom %}
 <div class="d-flex flex-column justify-content-center align-items-center col-12 h-100">
-    <a class="btn btn-danger rounded-pill shadow w-50" href="{% url 'core:round' %}">Continue</a>
+    <a class="btn btn-danger rounded-pill shadow w-50" href="{% url 'core:next_round' %}">Continue</a>
 </div>
 {% endblock %}

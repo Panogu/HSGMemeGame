@@ -3,13 +3,28 @@ from django.http import HttpResponse
 
 from .models import Game, Player, Card
 
+import csv
+
+def create_cards():
+
+    # Load and create the cards
+    cards_csv = csv.reader(open('core/media/cards.csv', 'r'))
+    data = list(cards_csv)
+
+    if (len(Card.objects.all()) < len(data)):
+        Card.objects.all().delete()
+        cards_to_create = []
+        
+        for row in data:
+            cards_to_create.append(Card(line=row[0]))
+
+        Card.objects.bulk_create(
+            cards_to_create
+        )
+        
+
 # TODO get game by ID (Hash)
 def get_current_game_or_create_it():
-    # Create the dummy cards
-    if (len(Card.objects.all()) < 12):
-        for i in range(1, 13):
-            card = Card(line="Dummy Line " + str(i))
-            card.save()
 
     # Create a single game
     current_game = Game()
@@ -21,8 +36,9 @@ def get_current_game_or_create_it():
 
 # The index function, which is called, when the game's domain is requested
 def index(request):
+    create_cards()
     current_game = get_current_game_or_create_it()
-    current_game.init_game()  
+    current_game.init_game()
 
     context = {'current_game': current_game}
     return render(request, 'core/index.html', context)
@@ -52,59 +68,38 @@ def add_user(request):
     
     return render(request, 'core/index.html', context)
 
-def start(request):
-    current_game = get_current_game_or_create_it()
-
-    current_game.init_game()
-
-    # TODO make more beautiful - in model
-    current_player = current_game.players.all()[current_game.current_player]
-
-    context = {'current_game': current_game, 'current_player': current_player}
-
-    return render(request, 'core/round_start.html', context)
-
 def display_cards_to_chose_from(request):
     current_game = get_current_game_or_create_it()
 
     # FIXME own function
-    context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_player().get_cards()}
+    context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_cards()}
     return render(request, 'core/round_main.html', context)
 
 def select_card(request, ID):
     current_game = get_current_game_or_create_it()
-    current_game.assign_card_to_player(ID)
-
-    current_player = current_game.players.all()[current_game.current_player]
+    current_game.select_card(ID)
 
     # FIXME own function
-    context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_player().get_cards(), 'current_card': ID}
+    context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_cards(), 'current_card': ID}
     return render(request, 'core/round_main.html', context)
 
 def submit_card(request):
     current_game = get_current_game_or_create_it()
     current_player = current_game.get_current_player()
-    print("Player:", current_game.current_player)
-    print("Judge:", current_game.judge)
-    # Check if current player is judge
-    if current_game.current_player == current_game.judge:
-        current_game.judge_evaluation()
-        current_game.move_to_next_round()
+    
+    next_action = current_game.submit_card()
 
+    if (next_action == 'next_player_start'):
+        context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_cards()}
+        return render(request, 'core/round_start.html', context)
+    elif (next_action == 'score_overview'):
         context = {'current_game': current_game}
         return render(request, 'core/results.html', context)
-    else:
-        current_game.move_to_next_player()
 
-        context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_player().get_cards()}
-        return render(request, 'core/round_start.html', context)
+def next_round(request):
+    current_game = get_current_game_or_create_it()
+    current_game.move_to_next_round()
 
-def results(request):
-    context = {'current_game': current_game}
-    return render(request, 'core/results.html', context)
-
-def next_round(self):
-    context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_player().get_cards()}
-    return render(request, 'core/round_start.html', context)
+    return display_cards_to_chose_from(request)
 
     
