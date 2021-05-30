@@ -12,5 +12,6 @@ urlpatterns = [
     path('submit_card/', views.submit_card, name='submit_card'),
     path('next_round', views.next_round, name="next_round"),
     path('reload_image', views.reload_image, name="reload_image"),
-    path('start', views.start, name="start")
+    path('start', views.start, name="start"),
+    path('initial_start', views.initial_start, name="initial_start")
 ]

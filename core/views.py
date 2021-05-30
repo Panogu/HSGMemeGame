@@ -84,7 +84,7 @@ def update_settings(request):
     
     return render(request, 'core/index.html', context)
 
-def start(request):
+def initial_start(request):
     current_game = get_current_game()
     if current_game == False:
         return redirect("core:index")
@@ -92,6 +92,13 @@ def start(request):
     # Init the game
     current_game.init_game()
     current_game.randomly_select_image()
+    return redirect("core:start")
+
+def start(request):
+    current_game = get_current_game()
+    if current_game == False:
+        return redirect("core:index")
+
 
     # The game can only be played by an amount of players between 3 and 6
     num_of_players = len(current_game.players.all())
