@@ -70,6 +70,10 @@ class Game(models.Model):
         else:
             return len(self.players.all()) - 1
 
+    # Used in templates
+    def get_player_before_current(self):
+        return self.get_previous_player(self.current_player)
+
     def get_last_winner(self):
         return self.players.all()[self.last_winner]
 

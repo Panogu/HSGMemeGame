@@ -10,5 +10,7 @@ urlpatterns = [
     path('round/', views.display_cards_to_chose_from, name='round'),
     path('select_card/<int:ID>', views.select_card, name='select_card'),
     path('submit_card/', views.submit_card, name='submit_card'),
-    path('next_round', views.next_round, name="next_round")
+    path('next_round', views.next_round, name="next_round"),
+    path('reload_image', views.reload_image, name="reload_image"),
+    path('start', views.start, name="start")
 ]

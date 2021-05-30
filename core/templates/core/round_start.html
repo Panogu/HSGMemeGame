@@ -11,10 +11,16 @@
 </div>
 {% endblock %}
 
-{% block actionbutton %}
-<a class="rounded-pill bg-warning shadow material-icons icon-link black big-button" href="#">
-    refresh
-</a>
+{% block ab_container %}
+    {% if current_game.get_player_before_current is current_game.judge %}
+        <div class="col-4 h-100 d-flex justify-content-center align-items-center">
+            {% block actionbutton %}
+            <a class="rounded-pill bg-warning shadow material-icons icon-link black big-button" href="{% url 'core:reload_image' %}">
+                refresh
+            </a>
+            {% endblock %}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block bottom %}

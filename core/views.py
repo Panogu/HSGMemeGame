@@ -77,6 +77,11 @@ def update_settings(request):
     
     return render(request, 'core/index.html', context)
 
+def start(request):
+    current_game = get_current_game_or_create_it()
+    context = {'current_game': current_game}
+    return render(request, 'core/round_start.html', context)
+
 def display_cards_to_chose_from(request):
     current_game = get_current_game_or_create_it()
 
@@ -112,6 +117,12 @@ def next_round(request):
     current_game = get_current_game_or_create_it()
     current_game.move_to_next_round()
 
-    return display_cards_to_chose_from(request)
+    return start(request)
+
+def reload_image(request):
+    current_game = get_current_game_or_create_it()
+    current_game.randomly_select_image()
+    context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_cards()}
+    return render(request, 'core/round_start.html', context)
 
     
