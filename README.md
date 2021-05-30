@@ -31,20 +31,20 @@ The project consists of two main elements: the backend and the frontend.
 ### **1) The backend**
 The backend includes the game logic, programmed in python. Also, here we access the various memes stored as .png and .gif files and the text cards stored as a .csv file.  
 We then access these files and distribute them throughout the game. We store the variables per player and keep counting them throughout the game. For our web framework, we use django which is a high-level Python Web framework that is frequently used in rapid development environments due to its clean design and easy usability. 
-In particular the backend includes the following files:
+In particular the backend includes the following files:  
 HSGMemeGame-main\core
 - View.py: A view is a request handler function, which receives HTTP requests and returns HTTP responses. Views access the data needed to satisfy requests via models, and delegate the formatting of the response to templates. 
 - Models.py: Models are Python objects that define the structure of an application's data, and provide mechanisms to manage (add, modify, delete) and query records in the database. We follow the django coding approach "build fat models and slim views" in the models.py and views.py.
 - URLs.py: A URL mapper is used to redirect HTTP requests to the appropriate view based on the request URL. The URL mapper can also match particular patterns of strings or digits that appear in a URL and pass these to a view function as data.  
 - \media: Here we store the text cards as well as the memes which we then call during the game
 - \static\core: This folder we need for any media elements that are part of the game (e.g., our placeholder example image) and are not replacable 
-- \migrations: This folder connects the database with the game / app. We initiate it in the installation process (see above).
+- \migrations: This folder connects the database with the game / app. We initiate it in the installation process (see above).  
 HSGMemeGame-main\
 - \hsgmemegame: Here we further define some settings as well as other elements required for the django framework.
 - db.sqlite3: This is the database for the cards and the players
 ### **2) The frontend**
 The frontend is coded in HTML and CSS. It creates the visual elements and the site with which the users can engage.  
 The frontend consists of XX different screens which are all relevant to the game. On each site there are buttons and other elements with which the users can interact to steer the flow of the game.   
-The frontend includes the following files:
+The frontend includes the following files:  
 HSGMemeGame-main\core\templates\core
 - All the files in this folder create the visual elements that will later be seen in the game. We used HTML and CSS for the coding of these visualisations. 
