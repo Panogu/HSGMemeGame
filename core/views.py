@@ -27,8 +27,8 @@ def create_cards():
 def get_current_game_or_create_it():
 
     # Create a single game
-    current_game = Game()
     if (len(Game.objects.all()) == 0):
+        current_game = Game()
         current_game.save()
     else:
         current_game = Game.objects.all()[0]
@@ -45,7 +45,6 @@ def index(request):
     
     create_cards()
     current_game = get_current_game_or_create_it()
-    current_game.init_game()
 
     current_game.randomly_select_image()
 
@@ -91,6 +90,9 @@ def start(request):
     current_game = get_current_game()
     if current_game == False:
         return redirect("core:index")
+
+    # Init the game
+    current_game.init_game()
 
     # The game can only be played by an amount of players between 3 and 6
     num_of_players = len(current_game.players.all())
