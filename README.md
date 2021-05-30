@@ -48,5 +48,6 @@ HSGMemeGame-main\
 The frontend is coded in HTML and CSS. It creates the visual elements and the site with which the users can engage.  
 The frontend consists of XX different screens which are all relevant to the game. On each site there are buttons and other elements with which the users can interact to steer the flow of the game.   
 The frontend includes the following files:  
+
 HSGMemeGame-main\core\templates\core
 - All the files in this folder create the visual elements that will later be seen in the game. We used HTML and CSS for the coding of these visualisations. 
