@@ -36,9 +36,12 @@ def get_current_game_or_create_it():
 
 # The index function, which is called, when the game's domain is requested
 def index(request):
+    
     create_cards()
     current_game = get_current_game_or_create_it()
     current_game.init_game()
+
+    current_game.randomly_select_image()
 
     context = {'current_game': current_game}
     return render(request, 'core/index.html', context)
@@ -52,8 +55,9 @@ def remove_user(request, ID):
     context = {'current_game': current_game}
     return render(request, 'core/index.html', context)
 
-def add_user(request):
+def update_settings(request):
 
+    # FIXME ganz andere funktion, nicht createn, sondern zu Startseite verweisen
     current_game = get_current_game_or_create_it()
     
     username = request.POST.get('username', "")
@@ -64,6 +68,11 @@ def add_user(request):
         player.save()
         current_game.players.add(player)
     
+    points_to_win = request.POST.get('points_to_win', -1)
+    if (points_to_win != -1):
+        current_game.points_to_win = points_to_win
+        current_game.save()
+
     context = {'current_game': current_game}
     
     return render(request, 'core/index.html', context)
@@ -94,6 +103,9 @@ def submit_card(request):
         return render(request, 'core/round_start.html', context)
     elif (next_action == 'score_overview'):
         context = {'current_game': current_game}
+        return render(request, 'core/results.html', context)
+    elif (next_action == 'game_was_won'):
+        context = {'current_game': current_game, 'game_was_won': True}
         return render(request, 'core/results.html', context)
 
 def next_round(request):

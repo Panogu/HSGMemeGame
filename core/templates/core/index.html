@@ -10,20 +10,13 @@
 
 {% block main %}
 <div class="container d-flex justify-content-center align-items-center">
-    <div class="d-flex w-100 h-100 row">
-        <div class="col-12 col-md-4 h-100">
+    <form action="{% url 'core:update_settings' %}" method="POST" class="w-100 h-100">
+        {% csrf_token %}
+        <div class="d-flex w-100 h-100 row">
+            <div class="col-12 offset-md-2 col-md-4 py-3 py-md-0 px-md-3 h-100">
             <div class="card h-100 shadow">
-                <div class="card-body">
-                    <h3 class="card-title text-center">Meme Packs</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-4 py-3 py-md-0 px-md-3 h-100">
-           <div class="card h-100 shadow">
-                <div class="card-body">
-                    <h3 class="card-title text-center">Players</h2>
-                    <form action="{% url 'core:add_user' %}" method="POST">
-                        {% csrf_token %}
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Players</h2>
                         {% for player in current_game.players.all %}
                         <p class="d-flex w-100 my-2 p-3 rounded bg-light border">
                             <span class="username">{{player.username}}</span>
@@ -38,18 +31,24 @@
                                 add
                             </a>
                         </div>
-                    </form>
-                </div>
-            </div> 
-        </div>
-        <div class="col-12 col-md-4 h-100">
-            <div class="card h-100 shadow">
-                <div class="card-body">
-                    <h3 class="card-title text-center">Points to win</h2>
+                    </div>
+                </div> 
+            </div>
+            <div class="col-12 col-md-4 h-100">
+                <div class="card h-100 shadow">
+                    <div class="card-body">
+                        <h3 class="card-title text-center">Points to win</h2>
+                        <input type="number" id="points_to_win" class="d-flex w-100 my-2 p-3 rounded bg-light border" name="points_to_win" min="1" max="100" value={{ current_game.points_to_win }}>
+                        <div class="d-flex align-items-center justify-content-center w-100 mt-3">
+                            <button type="submit" class="btn material-icons icon-link white rounded-pill bg-success">
+                                save
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 {% endblock %}
 

@@ -4,15 +4,20 @@
 {% block top %}
 <div class="px-4 d-flex h-100 w-100">
     <h1 class="col-12 text-center">
+        {% if not game_was_won %}
         {{ current_game.get_last_winner.username }} won round {{ current_game.current_round }}!
+        {% else %}
+        {{ current_game.get_last_winner.username }} won the game!
+        {% endif %}
     </h1>
 </div>
 {% endblock %}
 
 {% block main %}
 <div class="row h-100 w-100">
-    <div class="image d-flex col-6 px-4 justify-content-center h-100">
-        <div style="background: url('{% static 'core/example.jpg' %}');" class="image-container w-100 h-100"></div>
+    <div class="image d-flex col-6 px-4 justify-content-center h-100 flex-column">
+        <div style="background: url('{{ current_game.get_current_image|safe }}');" class="image-container w-100 h-100"></div>
+        <p class="bg-dark white p-2 m-0">{{ current_game.get_last_winning_line }}</p>
     </div>
     <div class="card col-6 p-4 round">
         <h2>Scoreboard</h2>
@@ -27,7 +32,13 @@
 {% endblock %}
 
 {% block bottom %}
+{% if not game_was_won %}
 <div class="d-flex flex-column justify-content-center align-items-center col-12 h-100">
     <a class="btn btn-danger rounded-pill shadow w-50" href="{% url 'core:next_round' %}">Continue</a>
 </div>
+{% else %}
+<div class="d-flex flex-column justify-content-center align-items-center col-12 h-100">
+    <a class="btn btn-danger rounded-pill shadow w-50" href="{% url 'core:index' %}">New Game</a>
+</div>
+{% endif %}
 {% endblock %}

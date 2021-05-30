@@ -1,9 +1,9 @@
 from django.db import models
 from django.core.files.storage import FileSystemStorage
-fs = FileSystemStorage(location='/media')
 
-import random
 import csv
+import random
+import os
 
 # FIXME Stärker mit gets arbeiten bei den many-to-many fields
 
@@ -12,8 +12,9 @@ def draw_cards(number = 6, already_selected_cards = []):
     #FIXME check if out of bounds
     card_pool = Card.objects
     for already_selected_card in already_selected_cards:
-        card_pool.exclude(id=already_selected_card)
-        print("Excluded:", already_selected_card)
+        #print("Excluded:", already_selected_card)
+        card_pool = card_pool.exclude(id=already_selected_card)
+        #print("Length of all cards:", len(card_pool.all()))
     return random.sample(list(card_pool.all()), number)
 
 class Card(models.Model):
@@ -86,6 +87,7 @@ class Game(models.Model):
             player.select_card(-1)
         self.last_winner = 0
         self.save()
+        self.randomly_select_image()
 
     def select_card(self, position_ID):
 
@@ -114,10 +116,13 @@ class Game(models.Model):
         else:
 
             # Choose the winning card
-            self.choose_winning_card()
+            game_was_won = self.choose_winning_card()
 
-            # Display the score overview
-            return 'score_overview'
+            # Display the score overview either as game being won completely or only for one round
+            if game_was_won:
+                return 'game_was_won'
+            else:
+                return 'score_overview'
 
         self.save()
 
@@ -162,6 +167,10 @@ class Game(models.Model):
 
         return False
 
+    def get_last_winning_line(self):
+        # FIXME Check in bounds
+        return Card.objects.filter(id=self.get_last_winner().selected_card)[0].line
+
     def get_current_cards(self):
         if self.current_player == self.judge:
             return self.get_selected_cards(numeric=False)
@@ -175,4 +184,14 @@ class Game(models.Model):
         self.current_cards.set(draw_cards())
         for player in self.players.all():
             player.select_card(-1)
+        self.randomly_select_image()
         self.save()
+
+    def randomly_select_image(self):
+        fs = FileSystemStorage(location='core/media/memes/PNG')
+        self.current_image = random.randint(0, len(fs.listdir("")[1]))
+        self.save()
+
+    def get_current_image(self):
+        fs = FileSystemStorage(location='core/media/memes/PNG')
+        return os.path.join('/media/core/media/memes/PNG/', fs.listdir("")[1][self.current_image])

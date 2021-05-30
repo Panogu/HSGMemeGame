@@ -15,7 +15,7 @@
 {% block main %}
 <div class="row h-100 w-100">
     <div class="image d-flex col-8 px-4 justify-content-center h-100">
-        <div style="background: url('{% static 'core/example.jpg' %}');" class="image-container w-100 h-100"></div>
+        <div style="background: url('{{ current_game.get_current_image|safe }}');" class="image-container w-100 h-100"></div>
     </div>
     <div class="col-4 h-100 d-flex justify-content-center align-items-center">
         {% block actionbutton %}
