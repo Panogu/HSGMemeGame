@@ -17,9 +17,15 @@ In order to execute the program, please follow these steps:
 1) Download the git repository as a .zip file
 2) Unzip it to your desired location
 3) Access your computer's terminal 
-4) Install django (in case you haven't installed it already, please follow this documentation: https://docs.djangoproject.com/en/1.8/howto/windows/#:~:text=Django%20can%20be%20installed%20easily,version%20in%20the%20command%20prompt.)
-5) Paste the path to the hsgmemegame folder into your terminal
-6) Copy the generated link, add "/game" to the end of the link, and put it in your browser
+5) Install django (in case you haven't installed it already, please follow this documentation: https://docs.djangoproject.com/en/1.8/howto/windows/#:~:text=Django%20can%20be%20installed%20easily,version%20in%20the%20command%20prompt.)
+6) Change the directory to the game path in the terminal
+7) Execute python manage.py makemigrations core
+8) Execute python manage.py migrate
+9) Execute python manage.py createsuperuser and klick through the process
+10) Execute python manage.py runserver
+11) Copy the generated link and paste it into your browser
+- Add "/game" to the end of the link to access and play the game
+- Add /admin to the end of the link to access the admin panel
 ## **Technical implementation - Overview**
 The project consists of three main elements: the backend, the django framework in between and the frontend.
 ### **1) The backend**
