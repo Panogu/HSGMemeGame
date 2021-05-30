@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 
 from .models import Game, Player, Card
@@ -34,6 +34,12 @@ def get_current_game_or_create_it():
         current_game = Game.objects.all()[0]
     return current_game
 
+def get_current_game():
+    if len(Game.objects.all()) > 0:
+        return Game.objects.all()[0]
+    else:
+        return False
+
 # The index function, which is called, when the game's domain is requested
 def index(request):
     
@@ -48,7 +54,10 @@ def index(request):
 
 def remove_user(request, ID):
     # TODO check if player is registered
-    current_game = get_current_game_or_create_it()
+    current_game = get_current_game()
+    if current_game == False:
+        return redirect("core:index")
+
     # FIXME do the TODO by checking the length
     player_to_remove = current_game.players.filter(id=ID)[0]
     current_game.players.remove(player_to_remove)
@@ -57,8 +66,9 @@ def remove_user(request, ID):
 
 def update_settings(request):
 
-    # FIXME ganz andere funktion, nicht createn, sondern zu Startseite verweisen
-    current_game = get_current_game_or_create_it()
+    current_game = get_current_game()
+    if current_game == False:
+        return redirect("core:index")
     
     username = request.POST.get('username', "")
     print("New user:", username)
@@ -78,19 +88,32 @@ def update_settings(request):
     return render(request, 'core/index.html', context)
 
 def start(request):
-    current_game = get_current_game_or_create_it()
+    current_game = get_current_game()
+    if current_game == False:
+        return redirect("core:index")
+
+    # The game can only be played by an amount of players between 3 and 6
+    num_of_players = len(current_game.players.all())
+    if num_of_players < 3 or num_of_players > 6:
+        return redirect("core:index")
+
     context = {'current_game': current_game}
     return render(request, 'core/round_start.html', context)
 
 def display_cards_to_chose_from(request):
-    current_game = get_current_game_or_create_it()
+    current_game = get_current_game()
+    if current_game == False:
+        return redirect("core:index")
 
     # FIXME own function
     context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_cards()}
     return render(request, 'core/round_main.html', context)
 
 def select_card(request, ID):
-    current_game = get_current_game_or_create_it()
+    current_game = get_current_game()
+    if current_game == False:
+        return redirect("core:index")
+
     current_game.select_card(ID)
 
     # FIXME own function
@@ -98,7 +121,9 @@ def select_card(request, ID):
     return render(request, 'core/round_main.html', context)
 
 def submit_card(request):
-    current_game = get_current_game_or_create_it()
+    current_game = get_current_game()
+    if current_game == False:
+        return redirect("core:index")
     current_player = current_game.get_current_player()
     
     next_action = current_game.submit_card()
@@ -114,13 +139,17 @@ def submit_card(request):
         return render(request, 'core/results.html', context)
 
 def next_round(request):
-    current_game = get_current_game_or_create_it()
+    current_game = get_current_game()
+    if current_game == False:
+        return redirect("core:index")
     current_game.move_to_next_round()
 
     return start(request)
 
 def reload_image(request):
-    current_game = get_current_game_or_create_it()
+    current_game = get_current_game()
+    if current_game == False:
+        return redirect("core:index")
     current_game.randomly_select_image()
     context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_cards()}
     return render(request, 'core/round_start.html', context)
