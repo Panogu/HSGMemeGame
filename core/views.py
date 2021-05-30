@@ -1,3 +1,6 @@
+# views.py
+# Author: Adrian Pandjaitan
+
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 
@@ -5,6 +8,7 @@ from .models import Game, Player, Card
 
 import csv
 
+# A function for loading all card lines from the media folder
 def create_cards():
 
     # Load and create the cards
@@ -23,7 +27,7 @@ def create_cards():
         )
         
 
-# TODO get game by ID (Hash)
+# Return the current game or create a new game if none exists
 def get_current_game_or_create_it():
 
     # Create a single game
@@ -34,6 +38,7 @@ def get_current_game_or_create_it():
         current_game = Game.objects.all()[0]
     return current_game
 
+# Returns the current game
 def get_current_game():
     if len(Game.objects.all()) > 0:
         return Game.objects.all()[0]
@@ -49,18 +54,21 @@ def index(request):
     context = {'current_game': current_game}
     return render(request, 'core/index.html', context)
 
+# Remove a user from the current game
 def remove_user(request, ID):
-    # TODO check if player is registered
+
+    # If no game exists, redirect to the index to create it
     current_game = get_current_game()
     if current_game == False:
         return redirect("core:index")
 
-    # FIXME do the TODO by checking the length
     player_to_remove = current_game.players.filter(id=ID)[0]
     current_game.players.remove(player_to_remove)
+
     context = {'current_game': current_game}
     return render(request, 'core/index.html', context)
 
+# Handle the settings form on the index page
 def update_settings(request):
 
     current_game = get_current_game()
@@ -84,6 +92,7 @@ def update_settings(request):
     
     return render(request, 'core/index.html', context)
 
+# Init the game if it is in the first round
 def initial_start(request):
     current_game = get_current_game()
     if current_game == False:
@@ -94,11 +103,12 @@ def initial_start(request):
     current_game.randomly_select_image()
     return redirect("core:start")
 
+# Start a round
 def start(request):
+
     current_game = get_current_game()
     if current_game == False:
         return redirect("core:index")
-
 
     # The game can only be played by an amount of players between 3 and 6
     num_of_players = len(current_game.players.all())
@@ -110,15 +120,16 @@ def start(request):
     context = {'current_game': current_game}
     return render(request, 'core/round_start.html', context)
 
+# Display the screen where a user can choose a card
 def display_cards_to_chose_from(request):
     current_game = get_current_game()
     if current_game == False:
         return redirect("core:index")
 
-    # FIXME own function
     context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_cards()}
     return render(request, 'core/round_main.html', context)
 
+# Handle the selection of a card
 def select_card(request, ID):
     current_game = get_current_game()
     if current_game == False:
@@ -126,10 +137,10 @@ def select_card(request, ID):
 
     current_game.select_card(ID)
 
-    # FIXME own function
     context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_cards(), 'current_card': ID}
     return render(request, 'core/round_main.html', context)
 
+# Handle the submission of a card
 def submit_card(request):
     current_game = get_current_game()
     if current_game == False:
@@ -153,20 +164,28 @@ def submit_card(request):
         context = {'current_game': current_game, 'game_was_won': True}
         return render(request, 'core/results.html', context)
 
+# Move to the next round
 def next_round(request):
+
     current_game = get_current_game()
     if current_game == False:
         return redirect("core:index")
+    
     current_game.move_to_next_round()
 
+    # Start the new round
     return start(request)
 
+# Get a new random image if requested
 def reload_image(request):
+
     current_game = get_current_game()
     if current_game == False:
         return redirect("core:index")
+
     current_game.randomly_select_image()
     context = {'current_game': current_game, 'current_player': current_game.get_current_player(), 'current_cards': current_game.get_current_cards()}
+    
     return render(request, 'core/round_start.html', context)
 
     

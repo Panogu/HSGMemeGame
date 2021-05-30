@@ -1,6 +1,10 @@
+# models.py
+# Author: Adrian Pandjaitan
+
 from django.db import models
 from django.core.files.storage import FileSystemStorage
 
+# Import libraries for reading csv files and gernating random numbers
 import csv
 import random
 import os
@@ -9,27 +13,35 @@ import os
 
 # Draw 6 cards + one card for each player, so everyone can draw a different card
 def draw_cards(number = 6, already_selected_cards = []):
-    #FIXME check if out of bounds
+
     card_pool = Card.objects
+
+    # Exclude all already selected cards
     for already_selected_card in already_selected_cards:
         #print("Excluded:", already_selected_card)
         card_pool = card_pool.exclude(id=already_selected_card)
         #print("Length of all cards:", len(card_pool.all()))
+    
+    # Choose cards randomly
     return random.sample(list(card_pool.all()), number)
 
+# A class representing a card
 class Card(models.Model):
     line = models.CharField(max_length=200)
 
+# A class representing a player
 class Player(models.Model):
     username = models.CharField(max_length=200)
     points = models.IntegerField(default=0)
     selected_card = models.IntegerField(default = 0)
 
+    # This function will be used to select the card and save the class
+    # It can be used to check whether the card is in bounds in the future 
     def select_card(self, card):
-        #FIXME check if out of bounds
         self.selected_card = card
         self.save()
 
+# A class containing the main game logic and data needed
 class Game(models.Model):
     players = models.ManyToManyField(Player)
     points_to_win = models.IntegerField(default=10)
@@ -46,7 +58,7 @@ class Game(models.Model):
 
     judge = models.IntegerField(default=0)
 
-    # Main Game Logic
+    #### Main Game Logic ####
     # Return the number of the next player (number of the player + 1 or 0 if again from beginning)
     def get_next_player(self, current):
         player_number = current + 1
@@ -55,16 +67,20 @@ class Game(models.Model):
         else:
             return 0
 
+    # Return the current player object
     def get_current_player(self):
-        # FIXME Check out of bounds
+        # TODO Check out of bounds
         return self.players.all()[self.current_player]
 
+    # Return the object of the current judge of the game
     def get_judge(self):
         return self.players.all()[self.judge]
     
+    # Return the object of the winner of the last round
     def get_last_winner(self):
         return self.players.all()[self.last_winner]
 
+    # Return the number of the player before the current player (will start again at the count of the players if it would be negative)
     def get_previous_player(self, current):
         player_number = current - 1
         if 0 <= player_number:
@@ -72,15 +88,12 @@ class Game(models.Model):
         else:
             return len(self.players.all()) - 1
 
-    # Used in templates
+    # Shortcut for the upper function for use in templates
     def get_player_before_current(self):
         return self.get_previous_player(self.current_player)
 
-    def get_last_winner(self):
-        return self.players.all()[self.last_winner]
-
+    # Initialize all variables needed for the game
     def init_game(self):
-        # FIXME, check if 3 players min, 6 players max
 
         # Initialize all game variables
         self.current_round = 1
@@ -95,6 +108,7 @@ class Game(models.Model):
         self.save()
         self.randomly_select_image()
 
+    # Select a card if requested by the user
     def select_card(self, position_ID):
 
         # Assign the card to the player
@@ -105,6 +119,7 @@ class Game(models.Model):
 
         print(self.get_current_player().username, "selected:", selected_card.id)
 
+    # Game logic, when user submitted a card (normally next player)
     def submit_card(self):
 
         # Do different things, based on whether the current player is the judge
@@ -132,6 +147,7 @@ class Game(models.Model):
 
         self.save()
 
+    # Return all cards selected by users in the game
     def get_selected_cards(self, numeric = True):
         cards = []
 
@@ -147,10 +163,12 @@ class Game(models.Model):
 
         return cards
 
+    # Move to the next player
     def move_to_next_player(self):
         self.current_player = self.get_next_player(self.current_player)
         self.save()
 
+    # Checks which player has won
     def choose_winning_card(self):
 
         card_selected_by_judge = self.get_judge().selected_card
@@ -173,16 +191,19 @@ class Game(models.Model):
 
         return False
 
+    # Gets the line of the winning card
     def get_last_winning_line(self):
         # FIXME Check in bounds
         return Card.objects.filter(id=self.get_last_winner().selected_card)[0].line
 
+    # Get the cards which the current player can choose from
     def get_current_cards(self):
         if self.current_player == self.judge:
             return self.get_selected_cards(numeric=False)
         else:
             return self.current_cards.all()
 
+    # Move to the next round
     def move_to_next_round(self):
         # Set the new judge to be the player before the current player
         self.judge = self.get_previous_player(self.judge)
@@ -193,15 +214,18 @@ class Game(models.Model):
         self.randomly_select_image()
         self.save()
 
+    # Select a random image from the PNG folder under media/memes
     def randomly_select_image(self):
         fs = FileSystemStorage(location='core/media/memes/PNG')
         self.current_image = random.randint(0, len(fs.listdir("")[1]))
         self.save()
 
+    # Get the currently selected image
     def get_current_image(self):
         fs = FileSystemStorage(location='core/media/memes/PNG')
         return os.path.join('/media/core/media/memes/PNG/', fs.listdir("")[1][self.current_image])
 
+    # Shortcut for removing the error message, which would be displayed in templates
     def remove_message(self):
         self.message = ""
         self.save()
