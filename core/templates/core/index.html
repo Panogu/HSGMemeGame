@@ -6,6 +6,40 @@
         HSG Meme Game
     </h1>
 </div>
+<div class="modal fade supertop" id="instruction_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">How to play</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>BASIC RULES: <br>
+
+            Find 2 or more friends and sit around a table with your device ready to be passed around. To start playing, you first will have to adjust the game settings.<br>
+            
+            Add the nicknames of the players <br>
+            
+            Define the number of points that are necessary to win <br>
+            
+            Initiate the game by pressing “Start”. In the beginning, one player is randomly assigned to be the judge of the other players memes. After that, the role of the judge will take turns accordingly. <br>
+            
+            The judge then looks through the photo cards and selects the one they want to judge for that round. They show it to everyone and confirm their choice. <br>
+            
+            When the first player is ready, he takes the device and confirms his presence. The player takes a few moments to decide which of the caption cards pairs funniest with the photo card and confirms his choice. This process is repeated for each player. <br>
+            
+            Once each player has submitted his captions, the judge gets an overview with all cards (which have been shuffled to anonymize them), reads them out one-by-one and selects the funniest caption card. Make sure the photo card is visible to everyone, because that way it’s funnier! <br>
+            
+            The player who played the funniest caption card wins that round and keeps the meme which consist of the photo and caption as a trophy! <br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block main %}
@@ -53,7 +87,10 @@
 {% endblock %}
 
 {% block bottom %}
-<div class="container d-flex w-100 h-100 align-items-center justify-content-center">
+<div class="container d-flex w-100 h-100 flex-column align-items-center justify-content-center">
     <a class="btn btn-danger rounded-pill shadow w-75" href="{% url 'core:initial_start' %}">Start</a>
+    <button type="button" class="btn btn-link mt-3" data-toggle="modal" data-target="#instruction_modal">
+        How to play
+    </button>
 </div>
 {% endblock %}
