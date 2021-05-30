@@ -11,6 +11,12 @@
 </head>
 
 <body>
+    {% block popup_message %}
+        {% if current_game.message %}
+            <script>alert('{{ current_game.message }}');</script>
+            <div style="display: none">{{ current_game.remove_message }}</div>
+        {% endif %}
+    {% endblock %}
     <div class="fullpage">
         {% block fullpage %}
         <div class="top">

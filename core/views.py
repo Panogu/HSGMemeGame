@@ -46,8 +46,6 @@ def index(request):
     create_cards()
     current_game = get_current_game_or_create_it()
 
-    current_game.randomly_select_image()
-
     context = {'current_game': current_game}
     return render(request, 'core/index.html', context)
 
@@ -93,10 +91,13 @@ def start(request):
 
     # Init the game
     current_game.init_game()
+    current_game.randomly_select_image()
 
     # The game can only be played by an amount of players between 3 and 6
     num_of_players = len(current_game.players.all())
     if num_of_players < 3 or num_of_players > 6:
+        current_game.message = "You have to have 3 to 6 players!"
+        current_game.save()
         return redirect("core:index")
 
     context = {'current_game': current_game}
@@ -126,7 +127,12 @@ def submit_card(request):
     current_game = get_current_game()
     if current_game == False:
         return redirect("core:index")
+
     current_player = current_game.get_current_player()
+    if current_player.selected_card == -1:
+        current_game.message = "Please select a card!"
+        current_game.save()
+        return redirect('core:round')
     
     next_action = current_game.submit_card()
 

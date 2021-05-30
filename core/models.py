@@ -42,6 +42,8 @@ class Game(models.Model):
 
     current_image = models.IntegerField(default=0)
 
+    message = models.CharField(max_length=255, default="")
+
     judge = models.IntegerField(default=0)
 
     # Main Game Logic
@@ -104,7 +106,7 @@ class Game(models.Model):
         print(self.get_current_player().username, "selected:", selected_card.id)
 
     def submit_card(self):
-        
+
         # Do different things, based on whether the current player is the judge
         if self.current_player != self.judge:
             
@@ -199,3 +201,7 @@ class Game(models.Model):
     def get_current_image(self):
         fs = FileSystemStorage(location='core/media/memes/PNG')
         return os.path.join('/media/core/media/memes/PNG/', fs.listdir("")[1][self.current_image])
+
+    def remove_message(self):
+        self.message = ""
+        self.save()
